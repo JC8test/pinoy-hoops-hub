@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pinoy Hoops Hub</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background:#f4f4f4; }
+    header { background:#0038a8; color:#fff; padding:20px; text-align:center; }
+    .teams, .roster { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap:20px; padding:20px; }
+    .card { background:#fff; border-radius:10px; padding:15px; box-shadow:0 4px 8px rgba(0,0,0,.1); cursor:pointer; }
+    .card img { width:100%; height:150px; object-fit:contain; }
+    table { width:100%; border-collapse: collapse; margin-top:10px; }
+    th, td { border:1px solid #ddd; padding:6px; text-align:center; }
+    th { background:#ce1126; color:white; }
+    button { margin:20px; padding:10px 15px; background:#0038a8; color:white; border:none; border-radius:6px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏀 Pinoy Hoops Hub</h1>
+    <p>Click a team to view full roster & stats</p>
+  </header>
+
+  <section id="teams" class="teams"></section>
+  <section id="roster" class="roster" style="display:none;"></section>
+
+  <script>
+    const data = {
+      ginebra: {
+        name: "Barangay Ginebra",
+        logo: "https://upload.wikimedia.org/wikipedia/en/5/5e/Barangay_Ginebra_San_Miguel_logo.png",
+        players: [
+          {name:"Scottie Thompson", ppg:13.5, rpg:6.2, apg:5.8},
+          {name:"Japeth Aguilar", ppg:14.1, rpg:7.9, apg:1.3}
+        ]
+      },
+      smb: {
+        name: "San Miguel Beermen",
+        logo: "https://upload.wikimedia.org/wikipedia/en/4/4f/San_Miguel_Beermen_logo.png",
+        players: [
+          {name:"June Mar Fajardo", ppg:19.2, rpg:11.5, apg:2.1},
+          {name:"CJ Perez", ppg:16.4, rpg:4.3, apg:3.9}
+        ]
+      },
+      tnt: {
+        name: "TNT Tropang Giga",
+        logo: "https://upload.wikimedia.org/wikipedia/en/3/3c/TNT_Tropang_Giga_logo.png",
+        players: [
+          {name:"RR Pogoy", ppg:15.1, rpg:4.8, apg:2.5},
+          {name:"Mikey Williams", ppg:17.9, rpg:5.1, apg:4.6}
+        ]
+      }
+    };
+
+    const teamsDiv = document.getElementById('teams');
+    const rosterDiv = document.getElementById('roster');
+
+    function loadTeams() {
+      teamsDiv.innerHTML = '';
+      rosterDiv.style.display = 'none';
+      teamsDiv.style.display = 'grid';
+
+      Object.keys(data).forEach(key => {
+        const team = data[key];
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<img src="${team.logo}"><h3>${team.name}</h3>`;
+        card.onclick = () => loadRoster(team);
+        teamsDiv.appendChild(card);
+      });
+    }
+
+    function loadRoster(team) {
+      teamsDiv.style.display = 'none';
+      rosterDiv.style.display = 'grid';
+      rosterDiv.innerHTML = `
+        <div style="grid-column:1/-1">
+          <button onclick="loadTeams()">⬅ Back to Teams</button>
+          <h2>${team.name}</h2>
+        </div>
+      `;
+
+      team.players.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${p.name}</h3>
+          <table>
+            <tr><th>PPG</th><th>RPG</th><th>APG</th></tr>
+            <tr><td>${p.ppg}</td><td>${p.rpg}</td><td>${p.apg}</td></tr>
+          </table>
+        `;
+        rosterDiv.appendChild(card);
+      });
+    }
+
+    loadTeams();
+  </script>
+</body>
+</html>
